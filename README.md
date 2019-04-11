@@ -1,2 +1,2 @@
-# integration-teko-id
+# TekoID Integration
 Integration Teko ID with OAuth2
