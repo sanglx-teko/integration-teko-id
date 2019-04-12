@@ -14,6 +14,8 @@ export const createS256CodeChallenge = codeVerifier =>
     .createHash('sha256')
     .update(codeVerifier)
     .digest('base64')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
     .replace(/=/g, '')
 
 export const setCookie = (cname, cvalue, exdays) => {
