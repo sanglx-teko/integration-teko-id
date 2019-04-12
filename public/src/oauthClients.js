@@ -1,5 +1,8 @@
 import ClientOAuth2 from 'client-oauth2'
 import * as constants from './constants'
+import { getCookie } from './utils'
+
+let prevState = getCookie('state')
 
 export default new ClientOAuth2({
   clientId: constants.TEKO_ID,
@@ -7,5 +10,5 @@ export default new ClientOAuth2({
   authorizationUri: 'http://localhost:5000/oauth/authorize',
   redirectUri: 'http://localhost:3000',
   scopes: ['openid', 'profile'],
-  state: 'mirai.hanabi'
+  state: prevState
 })

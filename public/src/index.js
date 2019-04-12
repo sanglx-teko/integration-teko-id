@@ -2,19 +2,18 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
 import App from './App'
-import * as constants from './constants'
 import tekoAuth from './oauthClients'
+import { getCookie } from './utils'
 import * as serviceWorker from './serviceWorker'
 
 window.oauth2Callback = uri => {
   tekoAuth.code
     .getToken(uri, {
-      body: { code_verifier: 'miraihanabichallenge' }
+      body: { code_verifier: getCookie('code_verifier') }
     })
     .then(user => {
-      console.log('User Token:', user)
-      localStorage.setItem(constants.TEKO_ACCESS_TOKEN_KEY, user.accessToken)
-      localStorage.setItem(constants.TEKO_ID_TOKEN_KEY, user.idToken)
+      localStorage.setItem('access_token', user.accessToken)
+      localStorage.setItem('id_token', user.data.idToken)
       window.location.replace('/')
     })
     .catch(err => {

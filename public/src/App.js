@@ -2,8 +2,16 @@ import React from 'react'
 import tekoAuth from './oauthClients'
 import logo from './logo.svg'
 import './App.css'
+import { generateRandomString, setCookie } from './utils'
 
 const App = props => {
+  const newState = generateRandomString()
+  setCookie('state', newState)
+
+  const newCodeVerifier = generateRandomString()
+  setCookie('code_verifier', newCodeVerifier)
+  const codeChallenge = newCodeVerifier
+
   return (
     <div className='App'>
       <header className='App-header'>
@@ -11,8 +19,9 @@ const App = props => {
         <a
           href={tekoAuth.code.getUri({
             query: {
-              code_challenge: 'miraihanabichallenge',
-              code_challenge_method: 'plain'
+              code_challenge: codeChallenge,
+              code_challenge_method: 'plain',
+              state: newState
             }
           })}
           className='App-link'
