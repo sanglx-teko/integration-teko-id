@@ -2,19 +2,20 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
 import App from './App'
-import { tekoAuth as oauthClient } from './oauthClients'
+import * as constants from './constants'
+import tekoAuth from './oauthClients'
 import * as serviceWorker from './serviceWorker'
 
 window.oauth2Callback = uri => {
-  oauthClient.code
+  tekoAuth.code
     .getToken(uri, {
-      body: {
-        scope: 'profile',
-        code_verifier: 'miraihanabichallenge'
-      }
+      body: { code_verifier: 'miraihanabichallenge' }
     })
     .then(user => {
       console.log('User Token:', user)
+      localStorage.setItem(constants.TEKO_ACCESS_TOKEN_KEY, user.accessToken)
+      localStorage.setItem(constants.TEKO_ID_TOKEN_KEY, user.idToken)
+      window.location.replace('/')
     })
     .catch(err => {
       console.error(err)
