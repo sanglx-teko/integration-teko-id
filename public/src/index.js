@@ -12,8 +12,9 @@ window.oauth2Callback = uri => {
       body: { code_verifier: getCookie('code_verifier') }
     })
     .then(user => {
+      localStorage.setItem('expires_in', user.expires)
       localStorage.setItem('access_token', user.accessToken)
-      localStorage.setItem('id_token', user.data.idToken)
+      localStorage.setItem('id_token', user.data.id_token)
       window.location.replace('/')
     })
     .catch(err => {
