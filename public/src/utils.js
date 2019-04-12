@@ -13,13 +13,8 @@ export const createS256CodeChallenge = codeVerifier =>
   crypto
     .createHash('sha256')
     .update(codeVerifier)
-    .digest('utf-8')
-
-export const comparePlainCodeChallenge = (codeVerifier, codeChallenge) =>
-  codeVerifier === codeChallenge
-
-export const compareS256CodeChallenge = (codeVerifier, codeChallenge) =>
-  createS256CodeChallenge(codeVerifier) === codeChallenge
+    .digest('base64')
+    .replace(/=/g, '')
 
 export const setCookie = (cname, cvalue, exdays) => {
   const d = new Date()

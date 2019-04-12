@@ -3,7 +3,11 @@ import tekoAuth from './oauthClients'
 import logo from './logo.svg'
 import './App.css'
 import currentUser from './user'
-import { generateRandomString, setCookie } from './utils'
+import {
+  createS256CodeChallenge,
+  generateRandomString,
+  setCookie
+} from './utils'
 
 const App = props => {
   if (currentUser.isLoggedIn())
@@ -38,7 +42,7 @@ const LoginView = props => {
 
   const newCodeVerifier = generateRandomString()
   setCookie('code_verifier', newCodeVerifier)
-  const codeChallenge = newCodeVerifier
+  const codeChallenge = createS256CodeChallenge(newCodeVerifier)
 
   return (
     <div className='App'>
@@ -48,7 +52,7 @@ const LoginView = props => {
           href={tekoAuth.code.getUri({
             query: {
               code_challenge: codeChallenge,
-              code_challenge_method: 'plain',
+              code_challenge_method: 'S256',
               state: newState
             }
           })}
