@@ -28,6 +28,9 @@ window.oauth2Callback = uri => {
     .finally(() => {
       window.history.pushState(null, document.title, '/')
     })
+    .finally(() => {
+      window.history.pushState(null, document.title, '/')
+    })
 }
 
 const queryString = window.location.search
