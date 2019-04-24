@@ -20,11 +20,13 @@ window.oauth2Callback = uri => {
         expireTime: user.expires,
         scopes: user.data.scopes
       }
-      window.history.pushState(null, document.title, '/')
       ReactDOM.render(<App />, document.getElementById('root'))
     })
     .catch(err => {
       console.error(err)
+    })
+    .finally(() => {
+      window.history.pushState(null, document.title, '/')
     })
 }
 
