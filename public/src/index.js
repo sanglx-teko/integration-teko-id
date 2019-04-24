@@ -3,19 +3,25 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import App from './App'
 import tekoAuth from './oauthClients'
-import { getCookie } from './utils'
 import * as serviceWorker from './serviceWorker'
+
+export let memStorage = {}
 
 window.oauth2Callback = uri => {
   tekoAuth.code
     .getToken(uri, {
-      body: { code_verifier: getCookie('code_verifier') }
+      body: { code_verifier: sessionStorage.getItem('code_verifier') }
     })
     .then(user => {
-      localStorage.setItem('expires_in', user.expires)
-      localStorage.setItem('access_token', user.accessToken)
-      localStorage.setItem('id_token', user.data.id_token)
-      window.location.replace('/')
+      memStorage = {
+        ...memStorage,
+        idToken: user.data.id_token,
+        accessToken: user.accessToken,
+        expireTime: user.expires,
+        scopes: user.data.scopes
+      }
+      window.history.pushState(null, document.title, '/')
+      ReactDOM.render(<App />, document.getElementById('root'))
     })
     .catch(err => {
       console.error(err)

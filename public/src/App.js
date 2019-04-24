@@ -3,11 +3,7 @@ import tekoAuth from './oauthClients'
 import logo from './logo.svg'
 import './App.css'
 import currentUser from './user'
-import {
-  createS256CodeChallenge,
-  generateRandomString,
-  setCookie
-} from './utils'
+import { createS256CodeChallenge, generateRandomString } from './utils'
 
 const App = props => {
   if (currentUser.isLoggedIn())
@@ -38,10 +34,9 @@ const HomePageView = props => {
 
 const LoginView = props => {
   const newState = generateRandomString()
-  setCookie('state', newState)
-
   const newCodeVerifier = generateRandomString()
-  setCookie('code_verifier', newCodeVerifier)
+  sessionStorage.setItem('state', newState)
+  sessionStorage.setItem('code_verifier', newCodeVerifier)
   const codeChallenge = createS256CodeChallenge(newCodeVerifier)
 
   return (

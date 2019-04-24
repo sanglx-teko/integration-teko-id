@@ -1,14 +1,10 @@
 import ClientOAuth2 from 'client-oauth2'
-import * as constants from './constants'
-import { getCookie } from './utils'
-
-let prevState = getCookie('state')
 
 export default new ClientOAuth2({
-  clientId: constants.TEKO_ID,
+  clientId: 'public-sample-client',
   accessTokenUri: 'http://localhost:5000/oauth/token',
   authorizationUri: 'http://localhost:5000/oauth/authorize',
   redirectUri: 'http://localhost:3000',
   scopes: ['openid', 'profile'],
-  state: prevState
+  state: sessionStorage.getItem('state') || null
 })
