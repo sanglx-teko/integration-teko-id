@@ -20,6 +20,7 @@ window.oauth2Callback = uri => {
         expireTime: user.expires,
         scopes: user.data.scopes
       }
+      console.log(user)
       ReactDOM.render(<App />, document.getElementById('root'))
     })
     .catch(err => {
