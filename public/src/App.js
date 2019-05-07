@@ -1,13 +1,12 @@
 import React from 'react'
-import tekoAuth from './oauthClients'
 import logo from './logo.svg'
 import './App.css'
-import currentUser from './user'
-import { createS256CodeChallenge, generateRandomString } from './utils'
 
 const App = props => {
-  if (currentUser.isLoggedIn())
-    return <HomePageView {...props} userInfo={currentUser.getInfo()} />
+  if (window.tekoId.isLoggedIn())
+    return (
+      <HomePageView {...props} userInfo={window.tekoId.getCurrentUserInfo()} />
+    )
   return <LoginView {...props} />
 }
 
@@ -18,13 +17,7 @@ const HomePageView = props => {
         <img src={logo} className='App-logo' alt='logo' />
         <p>User logged in!</p>
         <p>Current user info: {props.userInfo.name}</p>
-        <p
-          className='App-link'
-          onClick={() => {
-            localStorage.clear()
-            window.location.reload()
-          }}
-        >
+        <p className='App-link' onClick={window.tekoId.logout}>
           Logout
         </p>
       </header>
@@ -33,28 +26,13 @@ const HomePageView = props => {
 }
 
 const LoginView = props => {
-  const newState = generateRandomString()
-  const newCodeVerifier = generateRandomString()
-  sessionStorage.setItem('state', newState)
-  sessionStorage.setItem('code_verifier', newCodeVerifier)
-  const codeChallenge = createS256CodeChallenge(newCodeVerifier)
-
   return (
     <div className='App'>
       <header className='App-header'>
         <img src={logo} className='App-logo' alt='logo' />
-        <a
-          href={tekoAuth.code.getUri({
-            query: {
-              code_challenge: codeChallenge,
-              code_challenge_method: 'S256',
-              state: newState
-            }
-          })}
-          className='App-link'
-        >
+        <p className='App-link' onClick={window.tekoId.login}>
           Login with Teko
-        </a>
+        </p>
       </header>
     </div>
   )
