@@ -1,2 +1,2 @@
 authlib
-setups
+pyjwt

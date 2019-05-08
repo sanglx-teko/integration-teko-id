@@ -21,16 +21,27 @@ class IClient(IdentityClient):
     def save_state(self, state):
         session['oauth_state'] = state
 
-    def save_token(self, token):
-        session['oauth_token'] = token
+    def save_token(self, userid, token, expires_at):
+        if token is None:
+            session['oauth_user_id'] = None
+            session['oauth_token'] = None
+            session['oauth_expires'] = None
+        else:
+            session['oauth_user_id'] = userid
+            session['oauth_token'] = token
+            session['oauth_expires'] = expires_at
 
     def get_state(self):
         return session.get('oauth_state', None)
 
-    def get_token(self):
-        return session['oauth_token']
+    def get_user_id(self, token):
+        session_token = session.get('oauth_token', None)
+        if session_token is not None and session_token == token:
+            return session.get('oauth_user_id', None)
+        else:
+            return None
 
-    def get_expires(self):
+    def get_expires(self, token):
         return time.time()
 
 
@@ -44,7 +55,7 @@ class IClient(IdentityClient):
 client_id = 'sample-client'
 client_secret = 'qqw7u7qdEq4rFRLQzVhT'
 redirect_uri = 'http://localhost:5000/callback'
-scope = 'openid profile'
+scope = 'profile'
 
 
 auth_url = "https://id.teko.vn/oauth/authorize"
@@ -69,24 +80,17 @@ def callback():
     state = request.args.get('state')
     session_state = iclient.get_state()
     if session_state is not None and session_state == state:
-        token = iclient.fetch_token(redirect_response_url=request.url)
-        iclient.save_token(token)
+        userid, token, expires_at = iclient.fetch_token(
+            redirect_response_url=request.url)
+        iclient.save_token(userid, token, expires_at)
         return json.dumps(token), 200
     else:
         flash('Some thing went wrong. Please try again')
-        redirect(url_for('index'))
-
-
-@app.route('/profile')
-def profile():
-    oauth_client = OAuth2Session(
-        client_id=client_id, token=iclient.get_token())
-    return jsonify(oauth_client.get('http://localhost:5000/oauth/profile').json())
+        return redirect(url_for('index'))
 
 
 @app.route('/')
 def index():
-
     authorization_url, state = iclient.authorization_url()
     iclient.save_state(state)
     return render_template('index.html', authorization_url=authorization_url)
