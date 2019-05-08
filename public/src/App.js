@@ -1,13 +1,12 @@
 import React from 'react'
-import tekoAuth from './oauthClients'
 import logo from './logo.svg'
 import './App.css'
-import currentUser from './user'
-import { createS256CodeChallenge, generateRandomString } from './utils'
+
+const TekoID = window.TekoID
 
 const App = props => {
-  if (currentUser.isLoggedIn())
-    return <HomePageView {...props} userInfo={currentUser.getInfo()} />
+  if (TekoID.user.isLoggedIn())
+    return <HomePageView {...props} userInfo={TekoID.user.getUserInfo()} />
   return <LoginView {...props} />
 }
 
@@ -21,7 +20,7 @@ const HomePageView = props => {
         <p
           className='App-link'
           onClick={() => {
-            localStorage.clear()
+            TekoID.user.logout()
             window.location.reload()
           }}
         >
@@ -33,28 +32,13 @@ const HomePageView = props => {
 }
 
 const LoginView = props => {
-  const newState = generateRandomString()
-  const newCodeVerifier = generateRandomString()
-  sessionStorage.setItem('state', newState)
-  sessionStorage.setItem('code_verifier', newCodeVerifier)
-  const codeChallenge = createS256CodeChallenge(newCodeVerifier)
-
   return (
     <div className='App'>
       <header className='App-header'>
         <img src={logo} className='App-logo' alt='logo' />
-        <a
-          href={tekoAuth.code.getUri({
-            query: {
-              code_challenge: codeChallenge,
-              code_challenge_method: 'S256',
-              state: newState
-            }
-          })}
-          className='App-link'
-        >
+        <p className='App-link' onClick={() => TekoID.user.login()}>
           Login with Teko
-        </a>
+        </p>
       </header>
     </div>
   )
