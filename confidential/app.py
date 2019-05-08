@@ -1,8 +1,10 @@
 import os
+import time
 import json
 from requests_oauthlib import OAuth2Session
+from lib.identity_client import IdentityClient
 from flask import (Flask, render_template, request,
-                   redirect, url_for, flash, jsonify)
+                   redirect, url_for, flash, jsonify, session)
 
 
 GOOGLE_CLIENT_ID = "617942122008-09p80iqquja3pgjm0q61qd7o4rsj2j1a.apps.googleusercontent.com"
@@ -13,6 +15,23 @@ GOOGLE_SCOPE = [
     "https://www.googleapis.com/auth/userinfo.email",
     "https://www.googleapis.com/auth/userinfo.profile",
 ]
+
+
+class IClient(IdentityClient):
+    def save_state(self, state):
+        session['oauth_state'] = state
+
+    def save_token(self, token):
+        session['oauth_token'] = token
+
+    def get_state(self):
+        return session.get('oauth_state', None)
+
+    def get_token(self):
+        return session['oauth_token']
+
+    def get_expires(self):
+        return time.time()
 
 
 # 'client_id': 'sample-client'
@@ -36,39 +55,22 @@ refresh_url = token_url  # True for Google but not all providers.
 # token_url = "https://www.googleapis.com/oauth2/v4/token"
 # refresh_url = token_url  # True for Google but not all providers.
 
-session = {}  # temporary session
-
-
-def save_access_token(token):
-    session['oauth_token'] = token
-
 
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 os.environ["AUTHLIB_INSECURE_TRANSPORT"] = "1"
 app = Flask(__name__)
-app.secret_key = 'secret_key'
-
-
-def save_new_state(state):
-    if state is not None:
-        session['oauth_state'] = state
-
-
-def detele_state_from_session():
-    if session.get('oauth_state') is not None:
-        session.pop('oauth_state', None)
+app.secret_key = os.urandom(24)
+iclient = IClient(client_id, client_secret, auth_url,
+                  token_url, redirect_uri, refresh_url, scope)
 
 
 @app.route('/callback')
 def callback():
     state = request.args.get('state')
-    session_state = session.pop('oauth_state', None)
+    session_state = iclient.get_state()
     if session_state is not None and session_state == state:
-        client = OAuth2Session(
-            client_id, state=session_state, redirect_uri=redirect_uri)
-        token = client.fetch_token(token_url, client_secret=client_secret,
-                                   authorization_response=request.url)
-        save_access_token(token)
+        token = iclient.fetch_token(redirect_response_url=request.url)
+        iclient.save_token(token)
         return json.dumps(token), 200
     else:
         flash('Some thing went wrong. Please try again')
@@ -78,14 +80,13 @@ def callback():
 @app.route('/profile')
 def profile():
     oauth_client = OAuth2Session(
-        client_id=client_id, token=session['oauth_token'])
+        client_id=client_id, token=iclient.get_token())
     return jsonify(oauth_client.get('http://localhost:5000/oauth/profile').json())
 
 
 @app.route('/')
 def index():
-    oauth_client = OAuth2Session(client_id=client_id,
-                                 redirect_uri=redirect_uri, scope=scope)
-    authorization_url, state = oauth_client.authorization_url(auth_url)
-    save_new_state(state)
+
+    authorization_url, state = iclient.authorization_url()
+    iclient.save_state(state)
     return render_template('index.html', authorization_url=authorization_url)
