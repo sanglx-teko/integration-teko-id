@@ -8,11 +8,11 @@ class IdentityClient(object):
     def __init__(self,
                  client_id=None,
                  client_secret=None,
-                 auth_url=None,
-                 token_url=None,
+                 auth_url='https://id.teko.vn/oauth/authorize',
+                 token_url='https://id.teko.vn/oauth/token',
                  redirect_uri=None,
-                 refresh_url=None,
-                 scope=['profile']):
+                 refresh_url='https://id.teko.vn/oauth/token',
+                 scope=['openid', 'profile']):
         self.client_id = client_id
         self.client_secret = client_secret
         self.auth_url = auth_url
@@ -27,7 +27,7 @@ class IdentityClient(object):
         """
         raise NotImplementedError
 
-    def save_token(self, userid, token):
+    def save_token(self, userid, token, expires_at):
         """
         We need to implement this function
         """
@@ -97,3 +97,4 @@ class IdentityClient(object):
         token = _client.refresh_token(
             refresh_url=self.refresh_url, **extra)
         return token
+

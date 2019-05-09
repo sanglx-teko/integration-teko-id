@@ -1,7 +1,6 @@
 import os
 import time
 import json
-from requests_oauthlib import OAuth2Session
 from lib.identity_client import IdentityClient
 from flask import (Flask, render_template, request,
                    redirect, url_for, flash, jsonify, session)
@@ -19,9 +18,15 @@ GOOGLE_SCOPE = [
 
 class IClient(IdentityClient):
     def save_state(self, state):
+        """
+        Required function
+        """
         session['oauth_state'] = state
 
     def save_token(self, userid, token, expires_at):
+        """
+        Required function
+        """
         if token is None:
             session['oauth_user_id'] = None
             session['oauth_token'] = None
@@ -32,9 +37,15 @@ class IClient(IdentityClient):
             session['oauth_expires'] = expires_at
 
     def get_state(self):
+        """
+        Required function
+        """
         return session.get('oauth_state', None)
 
     def get_user_id(self, token):
+        """
+        Required function
+        """
         session_token = session.get('oauth_token', None)
         if session_token is not None and session_token == token:
             return session.get('oauth_user_id', None)
@@ -42,6 +53,9 @@ class IClient(IdentityClient):
             return None
 
     def get_expires(self, token):
+        """
+        Required function
+        """
         return time.time()
 
 
