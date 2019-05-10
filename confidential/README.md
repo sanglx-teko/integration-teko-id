@@ -2,7 +2,7 @@
 
 ## How to use
 
-- First, import `lib.identity_client` into your sourcecode. I.E:
+- First, import `iam.identity_client` into your sourcecode. I.E:
 
 ```python
     from lib.identity_client import IdentityClient
