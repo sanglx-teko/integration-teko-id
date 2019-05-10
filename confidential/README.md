@@ -5,7 +5,7 @@
 - First, import `iam.identity_client` into your sourcecode. I.E:
 
 ```python
-    from lib.identity_client import IdentityClient
+    from iam.identity_client import IdentityClient
 ```
 
 - Second, extend IdentityClient with and implement all required functions:
