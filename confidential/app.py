@@ -1,7 +1,7 @@
 import os
 import time
 import json
-from lib.identity_client import IdentityClient
+from iam.identity_client import IdentityClient
 from flask import (Flask, render_template, request,
                    redirect, url_for, flash, jsonify, session)
 
