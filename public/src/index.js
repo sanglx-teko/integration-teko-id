@@ -5,9 +5,9 @@ import App from './App'
 import * as serviceWorker from './serviceWorker'
 
 window.TekoID.init({
-  clientId: 'public-sample-client',
+  clientId: '223449891694322388403506853641423214378',
   redirectUri: 'http://localhost:3000',
-  scopes: ['openid', 'profile']
+  scopes: ['openid', 'profile', 'update_user']
 }).then(() => {
   ReactDOM.render(<App />, document.getElementById('root'))
 })
