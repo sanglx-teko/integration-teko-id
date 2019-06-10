@@ -6,7 +6,11 @@ const TekoID = window.TekoID
 
 const App = props => {
   if (TekoID.user.isLoggedIn())
-    return <HomePageView {...props} userInfo={TekoID.user.getUserInfo()} />
+    return (
+      console.log(TekoID.user.getAccessToken()) || (
+        <HomePageView {...props} userInfo={TekoID.user.getUserInfo()} />
+      )
+    )
   return <LoginView {...props} />
 }
 
