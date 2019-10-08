@@ -3,24 +3,16 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
+import TekoID from 'teko-oauth2'
 
-window.TekoID.init({
-  authorizationUri: 'http://localhost:5000/oauth/authorize',
-  tokenUri: 'http://localhost:5000/oauth/token',
-  clientId: '223449891694322388403506853641423214378',
+TekoID.init({
+  clientId: 'public_test_client',
   redirectUri: 'http://localhost:3000',
-  scopes: [
-    'openid',
-    'user_profile:read',
-    'user_profile:write',
-    'issues:read',
-    'issues:write'
-  ]
+  scopes: ['openid', 'profile'],
+  oauthDomain: 'https://dev-id.teko.vn'
 }).then(() => {
   ReactDOM.render(<App />, document.getElementById('root'))
 })
-
-ReactDOM.render(<App />, document.getElementById('root'))
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

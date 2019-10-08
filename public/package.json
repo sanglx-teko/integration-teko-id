@@ -7,7 +7,8 @@
     "jwt-decode": "^2.2.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-scripts": "2.1.8"
+    "react-scripts": "2.1.8",
+    "teko-oauth2": "^0.1.9"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -1,17 +1,12 @@
 import React from 'react'
 import logo from './logo.svg'
+import TekoID from 'teko-oauth2'
 import './App.css'
-
-const TekoID = window.TekoID
 
 const App = props => {
   if (TekoID.user.isLoggedIn())
-    return (
-      console.log(TekoID.user.getAccessToken()) || (
-        <HomePageView {...props} userInfo={TekoID.user.getUserInfo()} />
-      )
-    )
-  return <LoginView {...props} />
+    return <HomePageView {...props} userInfo={TekoID.user.getUserInfo()} />
+  return <LoginView />
 }
 
 const HomePageView = props => {
@@ -20,12 +15,18 @@ const HomePageView = props => {
       <header className='App-header'>
         <img src={logo} className='App-logo' alt='logo' />
         <p>User logged in!</p>
-        <p>Current user info: {props.userInfo.name}</p>
+        <p>Current user info: {props.userInfo.sub}</p>
+        <ul>
+          {Object.keys(props.userInfo).map((item, idx) => (
+            <div style={{ fontSize: 15 }} key={idx}>
+              {item}: {props.userInfo[item]}
+            </div>
+          ))}
+        </ul>
         <p
           className='App-link'
           onClick={() => {
             TekoID.user.logout()
-            window.location.reload()
           }}
         >
           Logout
@@ -35,7 +36,7 @@ const HomePageView = props => {
   )
 }
 
-const LoginView = props => {
+export const LoginView = props => {
   return (
     <div className='App'>
       <header className='App-header'>
