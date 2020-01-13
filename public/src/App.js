@@ -1,12 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import logo from './logo.svg'
-import TekoID from 'teko-oauth2'
 import './App.css'
+import { TekoID } from './index'
 
 const App = props => {
+  const [update, forceUpdate] = useState(false)
   if (TekoID.user.isLoggedIn())
-    return <HomePageView {...props} userInfo={TekoID.user.getUserInfo()} />
-  return <LoginView />
+    return <HomePageView userInfo={TekoID.user.getUserInfo()} />
+  return <LoginView update={update} forceUpdate={forceUpdate} />
 }
 
 const HomePageView = props => {

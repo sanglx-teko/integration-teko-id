@@ -6,10 +6,8 @@ import * as serviceWorker from './serviceWorker'
 import TekoID from 'teko-oauth2'
 
 TekoID.init({
-  clientId: 'public_test_client',
-  redirectUri: 'http://localhost:3000',
-  scopes: ['openid', 'profile'],
-  oauthDomain: 'https://dev-id.teko.vn'
+  clientId: 'b67d0f95d70545b3a55a492e21f0a276',
+  scopes: ['openid', 'profile']
 }).then(() => {
   ReactDOM.render(<App />, document.getElementById('root'))
 })
@@ -18,3 +16,5 @@ TekoID.init({
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister()
+
+export { TekoID }
