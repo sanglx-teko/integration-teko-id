@@ -14,7 +14,13 @@ const HomePageView = props => {
   return (
     <div className='App'>
       <header className='App-header'>
-        <img src={logo} className='App-logo' alt='logo' />
+        <a
+          href='http://localhost:3000'
+          target='_blank'
+          rel='noopener noreferrer'
+        >
+          <img src={logo} className='App-logo' alt='logo' />
+        </a>
         <p>User logged in!</p>
         <p>Current user info: {props.userInfo.sub}</p>
         <ul>

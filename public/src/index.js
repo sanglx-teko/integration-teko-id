@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
-import TekoID from 'teko-oauth2'
+
+const { TekoID } = window
 
 TekoID.init({
   clientId: 'b67d0f95d70545b3a55a492e21f0a276',
