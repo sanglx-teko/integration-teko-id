@@ -9677,10 +9677,10 @@ tar@^4:
     safe-buffer "^5.1.2"
     yallist "^3.0.2"
 
-teko-oauth2@0.3.9:
-  version "0.3.9"
-  resolved "https://registry.yarnpkg.com/teko-oauth2/-/teko-oauth2-0.3.9.tgz#237f143c0bf42a09f13f6ba846742a148ecbed22"
-  integrity sha512-WTTt3CLR+kbe/lF2hOjL7IzPYQeZPwLkhV1hg3BA9N15OdkGJ7NYgcSMLDRJ5mucaQ+jWOpAXHJUkoUA/Sd30g==
+teko-oauth2@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/teko-oauth2/-/teko-oauth2-1.0.2.tgz#d1fca8a1d6394a13bce6dfc464c844b6470cda41"
+  integrity sha512-PiZennIb1uBZKINooGvg9z7JJp1Ycx1PZVxzFfNLafK7MDM7KqiuDE5ZSiRt05W/MKBPmvsLfKGMsFAtSKHi5A==
   dependencies:
     client-oauth2 "^4.2.3"
     core-js "^3.4.2"
